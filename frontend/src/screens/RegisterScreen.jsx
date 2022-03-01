@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
@@ -17,19 +17,16 @@ function RegisterScreen() {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+  const location = useLocation();
   const { loading, error, userInfo } = useSelector(
     (state) => state.userRegister
   );
 
-  const [searchParams] = useSearchParams();
-
-  const redirect = searchParams.get("redirect")
-    ? searchParams.get("redirect")
-    : "/";
+  const redirect = location.search ? location.search.split("=")[1] : "/";
 
   useEffect(() => {
     if (userInfo) {
-      navigate(`${redirect}`);
+      navigate({ pathname: `../${redirect}` });
     }
   }, [userInfo, navigate, redirect]);
 
