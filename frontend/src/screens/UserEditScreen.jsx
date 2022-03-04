@@ -4,7 +4,7 @@ import { Form, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { getUserDetails } from "../actions/userAction";
+import { getUserDetails, updateUser } from "../actions/userAction";
 import FormContainer from "../components/FormContainer";
 
 function UserEditScreen() {
@@ -18,21 +18,32 @@ function UserEditScreen() {
   const navigate = useNavigate();
   const location = useLocation();
   const { loading, error, user } = useSelector((state) => state.userDetails);
+  const {
+    loading: loadingUpdate,
+    error: errorUpdate,
+    success: successUpdate,
+  } = useSelector((state) => state.userUpdate);
 
   const redirect = location.search ? location.search.split("=")[1] : "/";
 
   useEffect(() => {
-    if (!user.name || user._id !== id) {
-      dispatch(getUserDetails(id));
+    if (successUpdate) {
+      dispatch({ type: "USER_UPDATE_RESET" });
+      navigate("/admin/userlist");
     } else {
-      setName(user.name);
-      setEmail(user.email);
-      setIsAdmin(user.isAdmin);
+      if (!user.name || user._id !== id) {
+        dispatch(getUserDetails(id));
+      } else {
+        setName(user.name);
+        setEmail(user.email);
+        setIsAdmin(user.isAdmin);
+      }
     }
-  }, [user, dispatch, id]);
+  }, [user, dispatch, navigate, successUpdate, id]);
 
   const submitHandler = (e) => {
     e.preventDefault();
+    dispatch(updateUser({ _id: id, name, email, isAdmin }));
   };
 
   return (
@@ -42,7 +53,9 @@ function UserEditScreen() {
       </Link>
 
       <FormContainer>
-        <h1>EDdit User</h1>
+        <h1>Edit User</h1>
+        {loadingUpdate && <Loader />}
+        {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
         {loading ? (
           <Loader />
         ) : error ? (
