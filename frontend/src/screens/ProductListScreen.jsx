@@ -5,7 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { LinkContainer } from "react-router-bootstrap";
-import { productList, deleteProduct } from "../actions/productActions";
+import {
+  productList,
+  deleteProduct,
+  createProduct,
+} from "../actions/productActions";
 
 function ProductListScreen() {
   const dispatch = useDispatch();
@@ -20,14 +24,32 @@ function ProductListScreen() {
     error: errorDelete,
     success: successDelete,
   } = useSelector((state) => state.productDelete);
+  const {
+    loading: loadingCreate,
+    error: errorCreate,
+    success: successCreate,
+    product: createdProduct,
+  } = useSelector((state) => state.productCreate);
 
   useEffect(() => {
-    if (userInfo && userInfo.isAdmin) {
-      dispatch(productList());
-    } else {
+    dispatch({ type: "PRODUCT_CREATE_RESET" });
+    if (!userInfo.isAdmin) {
       navigate("/login");
     }
-  }, [dispatch, userInfo, navigate, successDelete]);
+
+    if (successCreate) {
+      navigate(`/admin/product/${createdProduct._id}`);
+    } else {
+      dispatch(productList());
+    }
+  }, [
+    dispatch,
+    userInfo,
+    navigate,
+    successDelete,
+    successCreate,
+    createdProduct,
+  ]);
 
   const deleteHandler = (id) => {
     if (window.confirm("are you sure?")) {
@@ -35,8 +57,8 @@ function ProductListScreen() {
     }
   };
 
-  const createProductsHandler = (product) => {
-    //CREATE PRODUCT
+  const createProductsHandler = () => {
+    dispatch(createProduct());
   };
   return (
     <>
@@ -52,6 +74,8 @@ function ProductListScreen() {
       </Row>
       {loadingDelete && <Loader />}
       {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
+      {loadingCreate && <Loader />}
+      {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
       {loading ? (
         <Loader />
       ) : error ? (
