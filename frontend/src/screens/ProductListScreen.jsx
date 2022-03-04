@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { LinkContainer } from "react-router-bootstrap";
-import { productList } from "../actions/productActions";
+import { productList, deleteProduct } from "../actions/productActions";
 
 function ProductListScreen() {
   const dispatch = useDispatch();
@@ -15,6 +15,11 @@ function ProductListScreen() {
     (state) => state.productList
   );
   const { userInfo } = useSelector((state) => state.userLogin);
+  const {
+    loading: loadingDelete,
+    error: errorDelete,
+    success: successDelete,
+  } = useSelector((state) => state.productDelete);
 
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
@@ -22,11 +27,11 @@ function ProductListScreen() {
     } else {
       navigate("/login");
     }
-  }, [dispatch, userInfo, navigate]);
+  }, [dispatch, userInfo, navigate, successDelete]);
 
   const deleteHandler = (id) => {
     if (window.confirm("are you sure?")) {
-      //DELETE PRODUCTS
+      dispatch(deleteProduct(id));
     }
   };
 
@@ -45,6 +50,8 @@ function ProductListScreen() {
           </Button>
         </Col>
       </Row>
+      {loadingDelete && <Loader />}
+      {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
       {loading ? (
         <Loader />
       ) : error ? (
