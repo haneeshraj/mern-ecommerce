@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
@@ -16,15 +16,12 @@ function UserEditScreen() {
 
   const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
   const { loading, error, user } = useSelector((state) => state.userDetails);
   const {
     loading: loadingUpdate,
     error: errorUpdate,
     success: successUpdate,
   } = useSelector((state) => state.userUpdate);
-
-  const redirect = location.search ? location.search.split("=")[1] : "/";
 
   useEffect(() => {
     if (successUpdate) {
