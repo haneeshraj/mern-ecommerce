@@ -138,7 +138,7 @@ function ProductEditScreen() {
               <Form.Control
                 type='file'
                 label='Choose File'
-                custom
+                custom='true'
                 onChange={uploadFileHandler}
               ></Form.Control>
               {uploading && <Loader />}
