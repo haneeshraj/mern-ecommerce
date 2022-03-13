@@ -103,7 +103,7 @@ function CartScreen() {
               <h2>
                 Subtotal (
                 {cartItems.reduce((acc, item) => {
-                  return acc + item.qty;
+                  return Number(acc) + Number(item.qty);
                 }, 0)}
                 ) items
               </h2>
