@@ -33,7 +33,6 @@ function App() {
             <Route path='/login' element={<LoginScreen />} />
             <Route path='/register' element={<RegisterScreen />} />
             <Route path='/profile' element={<ProfileScreen />} />
-            <Route path='/' element={<HomeScreen />} />
             <Route path='/products/:id' element={<ProductScreen />} />
             <Route path='/admin/userlist' element={<UserListScreen />} />
             <Route path='/admin/user/:id/edit' element={<UserEditScreen />} />
@@ -47,6 +46,8 @@ function App() {
               <Route path=':id' element={<CartScreen />} />
               <Route path='' element={<CartScreen />} />
             </Route>
+            <Route path='/search/:keyword' element={<HomeScreen />} />
+            <Route path='/' element={<HomeScreen />} />
           </Routes>
         </Container>
       </main>
