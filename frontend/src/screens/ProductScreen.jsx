@@ -17,6 +17,7 @@ import {
 } from "../actions/productActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import Meta from "../components/Meta";
 
 function ProductScreen() {
   const [qty, setQty] = useState(1);
@@ -62,6 +63,7 @@ function ProductScreen() {
         <Message variant='danger'>{error}</Message>
       ) : (
         <>
+          <Meta title={`Product | ${product.name}`} />
           <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid />

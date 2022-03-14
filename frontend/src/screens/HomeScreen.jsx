@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Product from "../components/Product";
 import { productList } from "../actions/productActions";
@@ -8,6 +9,7 @@ import Message from "../components/Message";
 import { useParams } from "react-router-dom";
 import Paginate from "../components/Paginate";
 import ProductCarosel from "../components/ProductCarosel";
+import Meta from "../components/Meta";
 
 function HomeScreen() {
   const { keyword, pageNumber } = useParams();
@@ -22,7 +24,14 @@ function HomeScreen() {
 
   return (
     <>
-      {!keyword && <ProductCarosel />}
+      <Meta title='Welcome to Proshop | Home'></Meta>
+      {!keyword ? (
+        <ProductCarosel />
+      ) : (
+        <Link to='/' className='btn btn-light'>
+          Go Back
+        </Link>
+      )}
       <h1>Latest Products</h1>
       {loading ? (
         <Loader />

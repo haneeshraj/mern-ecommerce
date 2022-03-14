@@ -68,9 +68,3 @@ h3 {
     display: none;
   }
 }
-
-.mr-sm-2 .ml-sm-5 .form-control {
-  display: inline;
-  width: 32vh;
-  margin-right: 10px;
-}
